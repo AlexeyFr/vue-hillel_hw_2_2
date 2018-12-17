@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>vue-hillel_hw_2_2</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+
+  <style>
+    /*Reset*/
+    html,body,div,span,applet,object,iframe,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,p,h1,h2,h3,h4,h5,h6,dl,dt,dd,ol,ul,li,fieldset,form,legend,table,tbody,tfoot,thead,tr,th{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}:focus{outline:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+    /*Reset*/
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: normal;
+      font-style: normal;
+      line-height: 1.2;
+      font-size: 14px;
+      background: #cecece;
+      color: #000;
+    }
+    .title {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .score {
+      width: 200px;
+      text-align: center;
+      font-size: 20px;
+      margin: 0 auto;
+      border: 1px solid #000;
+      padding: 10px 0;
+    }
+    .score .caption {
+      text-transform: uppercase;
+    }
+    .separator {
+      margin: 0 5px;
+    }
+    .game_wrap {
+      width: 640px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .caption {
+      font-size: 18px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .user,
+    .comp {
+      display: flex;
+      flex-direction: column;
+    }
+    .choice {
+      width: 100px;
+      margin-bottom: 10px;
+      border-radius: 50%;
+      border: 5px solid transparent;
+      transition: border-color .2s linear;
+    }
+    .user .choice {
+      cursor: pointer;
+    }
+    .user .choice:hover {
+      border-color: #0000ff;
+    }
+    .comp .choice {
+      opacity: .5;
+    }
+    .choice.selected {
+      border-color: #0000ff;
+      opacity: 1;
+    }
+    .result {
+      font-size: 20px;
+      text-align: center;
+    }
+    .show_result {
+      color: #ff0000
+    }
+  </style>
+
+</head>
+<body>
+
+  <div id="app">
+
+    <h1 class="title">Game: "Rock Scissors Paper"</h1>
+
+    <div class="score">
+      <div class="caption">score</div>
+      <span class="user_score">{{userScore}}</span>
+      <span class="separator">:</span>
+      <span class="comp_score">{{copmScore}}</span>
+    </div>
+
+    <div class="game_wrap">
+
+      <div class="user">
+        <div class="caption">User</div>
+        <img v-for="variant in variants" 
+        :class="['choice', user_selected == variant.choice && 'selected']"
+        :src="variant.src" :alt="variant.choice" @click="userСhoice(variant.choice)">
+      </div>
+
+      <div class="result">
+        <div>Make your choice!</div>
+        <div class="show_result">{{result}}</div>
+      </div>
+
+      <div class="comp">
+        <div class="caption">Computer</div>
+        <img v-for="variant in variants"
+        :class="['choice', comp_selected == variant.choice && 'selected']"
+        :src="variant.src" :alt="variant.choice">
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const app = new Vue({
+      el: '#app',
+
+      data: {
+
+        userScore: 0,
+        copmScore: 0,
+        user_selected: '',
+        comp_selected: '',
+
+        variants: [
+          {choice:'rock', src:'images/rock.png'},
+          {choice:'scissors', src:'images/scissors.png'},
+          {choice:'paper', src:'images/paper.png'},
+        ],
+
+        result: 'Try to win',
+        results: {
+          userWins: 'User wins!',
+          copmWins: 'Comp wins!',
+          draw:'Draw!'
+        },
+
+      },
+
+      methods: {
+
+        userСhoice (userСhoice) {
+
+          let randon = Math.floor(Math.random() * 3);
+          copmChoice = this.variants[randon].choice;
+          this.comp_selected = copmChoice;
+
+          this.user_selected = userСhoice;
+
+          switch (userСhoice + copmChoice) {
+            case 'rockscissors':
+            case 'scissorspaper':
+            case 'paperrock':
+              this.userScore++;
+              this.result = this.results.userWins;
+              break;
+            case 'scissorsrock':
+            case 'paperscissors':
+            case 'rockpaper':
+              this.copmScore++;
+              this.result = this.results.copmWins;
+              break;
+            case 'rockrock':
+            case 'paperpaper':
+            case 'scissorsscissors':
+              this.result = this.results.draw;
+              break;
+          }
+
+        }
+      },
+
+    })
+
+  </script>
+
+</body>
+</html>
